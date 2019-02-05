@@ -267,7 +267,8 @@ public final class Main {
         //System.out.println("Managed to run grip pipeline");
         Object[] objects = pipeline.getOutput(4).toArray();
         for(int i = 0; i < objects.length - 1 ; i++){
-          System.out.println(pipeline.getOutput(4).get(0).rows());
+          System.out.println(pipeline.getOutput(4).get(0).col(i));
+          System.out.println(pipeline.getOutput(4).get(0).row(i));
         }
         // do something with pipeline results
       });
