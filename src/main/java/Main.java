@@ -213,11 +213,17 @@ public final class Main {
 
     GripPipeline pipeline = new GripPipeline();
 
-    ArrayList<MatOfPoint> getOutput(int index) {
+    ArrayList<MatOfPoint> getOutput() {
       return pipeline.filterContoursOutput();
     }
 
-    
+    public Rect[] getPipeline(){
+      for(MatOfPoint item : getOutput()){
+       final Rect bb = Imgproc.boundingRect(item);
+        System.out.println("area" + bb.area());
+      }
+      return bb[];
+    }
 
     @Override
     public void process(Mat mat) {
@@ -249,8 +255,10 @@ public final class Main {
       //Use ClientTeam for robot
       //ntinst.startClientTeam(team);
 
+      ntinst.startClient("10.52.63.2");
+
       //Use client for home use and input ip
-      ntinst.startClient("192.168.137.1");
+      //ntinst.startClient("192.168.137.1");
     }
 
     // start cameras
@@ -265,11 +273,8 @@ public final class Main {
       VisionThread visionThread = new VisionThread(cameras.get(0),
       new MyPipeline(), pipeline -> {
         //System.out.println("Managed to run grip pipeline");
-        Object[] objects = pipeline.getOutput(4).toArray();
-        for(int i = 0; i < objects.length - 1 ; i++){
-          System.out.println(pipeline.getOutput(4).get(0).col(i));
-          System.out.println(pipeline.getOutput(4).get(0).row(i));
-        }
+        pipeline.getPipeline();
+        
         // do something with pipeline results
       });
       /* something like this for GRIP:

@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -6,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.HashMap;
+
+import edu.wpi.first.wpilibj.vision.VisionPipeline;
 
 import org.opencv.core.*;
 import org.opencv.core.Core.*;
@@ -21,7 +24,7 @@ import org.opencv.objdetect.*;
 *
 * @author GRIP
 */
-public class GripPipeline {
+public class GripPipeline implements VisionPipeline {
 
 	//Outputs
 	private Mat resizeImageOutput = new Mat();
@@ -38,9 +41,7 @@ public class GripPipeline {
 	/**
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
-	public void process(Mat source0) {
-		//System.out.println("Attempting to run. Grip");
-
+	@Override	public void process(Mat source0) {
 		// Step Resize_Image0:
 		Mat resizeImageInput = source0;
 		double resizeImageWidth = 320.0;
@@ -50,9 +51,9 @@ public class GripPipeline {
 
 		// Step HSV_Threshold0:
 		Mat hsvThresholdInput = resizeImageOutput;
-		double[] hsvThresholdHue = {80.93525179856115, 134.54545454545453};
-		double[] hsvThresholdSaturation = {14, 136};
-		double[] hsvThresholdValue = {231.2901373816201, 255.0};
+		double[] hsvThresholdHue = {79.31654676258992, 119.39393939393939};
+		double[] hsvThresholdSaturation = {38.90607852700889, 147.67676767676767};
+		double[] hsvThresholdValue = {192.62589928057554, 255.0};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
 		// Step CV_erode0:
@@ -82,9 +83,9 @@ public class GripPipeline {
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
 		double filterContoursMinArea = 150.0;
 		double filterContoursMinPerimeter = 100.0;
-		double filterContoursMinWidth = 16.0;
-		double filterContoursMaxWidth = 2002.0;
-		double filterContoursMinHeight = 10.0;
+		double filterContoursMinWidth = 23.0;
+		double filterContoursMaxWidth = 42.0;
+		double filterContoursMinHeight = 50.0;
 		double filterContoursMaxHeight = 1010.0;
 		double[] filterContoursSolidity = {0.0, 100.0};
 		double filterContoursMaxVertices = 1000000.0;
@@ -242,8 +243,6 @@ public class GripPipeline {
 		int method = Imgproc.CHAIN_APPROX_SIMPLE;
 		Imgproc.findContours(input, contours, hierarchy, mode, method);
 	}
-
-
 	/**
 	 * Filters out contours that do not meet certain criteria.
 	 * @param inputContours is the input list of contours
